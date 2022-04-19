@@ -6,11 +6,13 @@ public class HomeWorkTwo {
 //        numberType(0);
 //        System.out.println(checkNumber(-1));
 //        printText("Hello", 7);
-        System.out.println(yearType(2022));
+        System.out.println(yearType(1980));
     }
 
-    public static boolean yearType(int year){
-        return (!(year % 4 == 0) || ((year % 100 == 0) && !(year % 400 == 0)));
+    // ошиблась, в услвоии true если високосный, в предыдущем варианте у меня было наоборот
+    // сейчас поправила
+    public static boolean yearType(int year) {
+        return ((year % 4 == 0) || (!(year % 100 == 0) && (year % 400 == 0)));
     }
 
 
