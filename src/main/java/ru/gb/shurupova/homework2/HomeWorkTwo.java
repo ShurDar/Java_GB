@@ -5,9 +5,14 @@ public class HomeWorkTwo {
 //        System.out.println(checkSum(19, 1));
 //        numberType(0);
 //        System.out.println(checkNumber(-1));
-        printText("Hello", 7);
-
+//        printText("Hello", 7);
+        System.out.println(yearType(2022));
     }
+
+    public static boolean yearType(int year){
+        return (!(year % 4 == 0) || ((year % 100 == 0) && !(year % 400 == 0)));
+    }
+
 
     public static void printText(String text, int a) {
         for (int i = 0; i < a; i++) {
