@@ -1,7 +1,10 @@
 package ru.gb.shurupova.homework3;
 
+
 public class HomeWorkThree {
     public static void main(String[] args) {
+        array(5, 7);
+
 
         // task 4
         int[][] d = new int[5][5];
@@ -61,5 +64,16 @@ public class HomeWorkThree {
             System.out.print(b[y]);
             System.out.println();
         }
+    }
+
+
+    // task 5
+    public static int array(int len, int initialValue) {
+        int[] o = new int[len];
+        for (int i = 0; i < o.length; i++) {
+            o[i] = initialValue;
+            System.out.print(o[i] + " ");
+        }
+        return len;
     }
 }
