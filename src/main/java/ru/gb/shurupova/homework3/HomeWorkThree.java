@@ -3,6 +3,21 @@ package ru.gb.shurupova.homework3;
 public class HomeWorkThree {
     public static void main(String[] args) {
 
+        // task 4
+        int[][] d = new int[5][5];
+        for (int v = 0; v < d.length; v++) {
+            for (int w = 0; w < d[v].length; w++) {
+                if ((v == w)) {
+                    d[v][w] = 1;
+                }
+                if ((v + w) == 4) {
+                    d[v][w] = 1;
+                }
+                System.out.print(d[v][w] + " ");
+            }
+            System.out.println();
+        }
+
 
         // task 3
         int[] c = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
