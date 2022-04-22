@@ -1,9 +1,39 @@
 package ru.gb.shurupova.homework3;
 
 
+import java.util.Random;
+
 public class HomeWorkThree {
     public static void main(String[] args) {
         array(5, 7);
+
+
+        // task 5
+        int[] value = new int[10];
+        for (int u = 0; u < value.length; u++) {
+            value[u] = new Random().nextInt(100);
+            System.out.print(value[u] + " ");
+        }
+
+        // min value
+        int min = value[0];
+        for (int i = 0; i < value.length; i++) {
+            if (min > value[i]) {
+                min = value[i];
+            }
+        }
+        System.out.println();
+        System.out.print("Min value = " + min);
+
+        // max value
+        int max = value[0];
+        for (int j = 0; j < value.length; j++) {
+            if (max < value[j]) {
+                max = value[j];
+            }
+        }
+        System.out.println();
+        System.out.print("Max value = " + max);
 
 
         // task 4
@@ -74,6 +104,5 @@ public class HomeWorkThree {
             o[i] = initialValue;
             System.out.print(o[i] + " ");
         }
-
     }
 }
