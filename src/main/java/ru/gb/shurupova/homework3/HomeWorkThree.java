@@ -68,12 +68,12 @@ public class HomeWorkThree {
 
 
     // task 5
-    public static int array(int len, int initialValue) {
+    public static void array(int len, int initialValue) {
         int[] o = new int[len];
         for (int i = 0; i < o.length; i++) {
             o[i] = initialValue;
             System.out.print(o[i] + " ");
         }
-        return len;
+
     }
 }
