@@ -45,11 +45,11 @@ public class Calculator extends JFrame {
             }
         };
 
-// экшен листинер для кнопок "C+-*/="
+// экшен листинер для кнопок "+-*/="
         ActionListener buttonListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JButton source = (JButton) e.getSource(); //передадим туда текст, который этой кнопке
+                JButton source = (JButton) e.getSource(); //передадим туда текст, который на этой кнопке
                 String action = source.getText(); // кнопка, кот. нажали или действие кот. надо сделать
                 Double rightOperand = Double.parseDouble(display.getText());
                 // метод parseDouble превращает строку в число, принимает на вход строку и превращает ее в число
@@ -85,6 +85,23 @@ public class Calculator extends JFrame {
             }
         };
 
+// экшен листинер для +/-
+        ActionListener negativeButtonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               double negativeB = Double.parseDouble(display.getText());
+               negativeB = negativeB * (-1);
+               display.setText(negativeB + "");
+            }
+        };
+
+// экшен листинер для С
+        ActionListener deleteButtonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                display.setText("0");
+            }
+        };
 
         JPanel numberPanel = new JPanel(); // несколько компоновщиков на одной панели
         GridLayout numberLayout = new GridLayout(5, 4, 5, 5);
@@ -96,7 +113,7 @@ public class Calculator extends JFrame {
         numberPanel.add(percentButton);
         numberPanel.add(bracketButton);
         numberPanel.add(deleteButton);
-        deleteButton.addActionListener(buttonListener);
+        deleteButton.addActionListener(deleteButtonListener);
 
 // добавляем кнопки на панель numberPanel
         for (int i = 1; i < 10; i++) {
@@ -113,7 +130,7 @@ public class Calculator extends JFrame {
         nullButton.addActionListener(numberListener);
 
         JButton negativeButton = new JButton("+/-");
-
+        negativeButton.addActionListener(negativeButtonListener);
 
 
 // добавим новые кнопки на поле калькулятора
