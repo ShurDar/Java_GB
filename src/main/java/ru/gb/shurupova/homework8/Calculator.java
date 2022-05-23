@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class Calculator extends JFrame {
 
     private Double leftOperand;
-    private String operation;
+    private String operation = "";
 
     public Calculator() {
         setTitle("Calculator");
@@ -89,9 +89,9 @@ public class Calculator extends JFrame {
         ActionListener negativeButtonListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               double negativeB = Double.parseDouble(display.getText());
-               negativeB = negativeB * (-1);
-               display.setText(negativeB + "");
+                double negativeB = Double.parseDouble(display.getText());
+                negativeB = negativeB * (-1);
+                display.setText(negativeB + ""); // добавл€€ "" привожу Double к строке
             }
         };
 
@@ -103,6 +103,51 @@ public class Calculator extends JFrame {
             }
         };
 
+// экшен листинер дл€ %
+        ActionListener percentButtonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // % имеет две операции:
+                // 1 - когда вводим чило и нажимем % - оно умножаетс€ на 0,01 или делитс€ на 100
+                // 2 - когда сначала вводитс€ число, с ним выполн€етс€ операци€ и от второго считаетс€ %
+
+                if (operation.equals("")) {
+                    String number = display.getText();
+                    double temp = Double.parseDouble(number) / 100;
+                    number = temp + "";
+                    display.setText(number);
+                } else {
+                    JButton source = (JButton) e.getSource();
+                    String action = source.getText();
+                    Double rightOperand = Double.parseDouble(display.getText());
+                    if ("=".equals(action)) {
+                        if (leftOperand != null) {
+                            switch (operation) {
+                                case "+":
+                                    display.setText(String.valueOf(leftOperand + leftOperand * rightOperand / 100));
+                                    break;
+                                case "-":
+                                    display.setText(String.valueOf(leftOperand - leftOperand * rightOperand / 100));
+                                    break;
+                                case "*":
+                                    display.setText(String.valueOf(leftOperand * rightOperand / 100));
+                                    break;
+                                case "/":
+                                    display.setText(String.valueOf(leftOperand / rightOperand * 100));
+                                    break;
+                            }
+                            leftOperand = Double.parseDouble(display.getText());
+                            operation = null;
+                        }
+                        return;
+                    }
+                    leftOperand = Double.parseDouble(display.getText());
+                    operation = action;
+                    display.setText("0");
+                }
+            }
+        };
+
         JPanel numberPanel = new JPanel(); // несколько компоновщиков на одной панели
         GridLayout numberLayout = new GridLayout(5, 4, 5, 5);
         numberPanel.setLayout(numberLayout);
@@ -111,6 +156,7 @@ public class Calculator extends JFrame {
         JButton bracketButton = new JButton("( )");
         JButton deleteButton = new JButton("C");
         numberPanel.add(percentButton);
+        percentButton.addActionListener(percentButtonListener);
         numberPanel.add(bracketButton);
         numberPanel.add(deleteButton);
         deleteButton.addActionListener(deleteButtonListener);
