@@ -71,6 +71,7 @@ public class Calculator extends JFrame {
                             case "/":
                                 display.setText(String.valueOf(leftOperand / rightOperand));
                                 break;
+
                         }
                         // присовили leftOperand то что лежит на дисплее как число
                         leftOperand = Double.parseDouble(display.getText());
@@ -107,43 +108,39 @@ public class Calculator extends JFrame {
         ActionListener percentButtonListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // % имеет две операции:
-                // 1 - когда вводим чило и нажимем % - оно умножается на 0,01 или делится на 100
+                // кноапка % имеет две операции:
+                // 1 - когда вводим число и нажимем % - оно умножается на 0,01 или делится на 100
                 // 2 - когда сначала вводится число, с ним выполняется операция и от второго считается %
 
-                if (operation.equals("")) {
-                    String number = display.getText();
-                    double temp = Double.parseDouble(number) / 100;
-                    number = temp + "";
-                    display.setText(number);
-                } else {
-                    JButton source = (JButton) e.getSource();
-                    String action = source.getText();
-                    Double rightOperand = Double.parseDouble(display.getText());
-                    if ("=".equals(action)) {
-                        if (leftOperand != null) {
-                            switch (operation) {
-                                case "+":
-                                    display.setText(String.valueOf(leftOperand + leftOperand * rightOperand / 100));
-                                    break;
-                                case "-":
-                                    display.setText(String.valueOf(leftOperand - leftOperand * rightOperand / 100));
-                                    break;
-                                case "*":
-                                    display.setText(String.valueOf(leftOperand * rightOperand / 100));
-                                    break;
-                                case "/":
-                                    display.setText(String.valueOf(leftOperand / rightOperand * 100));
-                                    break;
-                            }
-                            leftOperand = Double.parseDouble(display.getText());
-                            operation = null;
+                if (operation.equals("")) { // если оператор равено "", то мы должны ввесьт данные на дисплей и разделить их на 100
+                    String number = display.getText(); // получаем из текста, записаного на дисплее, значение number
+                    double temp = Double.parseDouble(number) / 100; // заводим временную переменную temp
+                    number = temp + ""; // значение переменной number приводим к значению temp, чтобы привести все к стринг ставим ""
+                    display.setText(number); // выводим на дисплей значение переменной number
+                }
+
+                JButton source = (JButton) e.getSource();
+                String action = source.getText();
+                Double rightOperand = Double.parseDouble(display.getText());
+                if ("%".equals(action)) {
+                    if (leftOperand != null) {
+                        switch (operation) {
+                            case "+":
+                                display.setText(String.valueOf(leftOperand + leftOperand * rightOperand / 100));
+                                break;
+                            case "-":
+                                display.setText(String.valueOf(leftOperand - leftOperand * rightOperand / 100));
+                                break;
+                            case "*":
+                                display.setText(String.valueOf(leftOperand * rightOperand / 100));
+                                break;
+                            case "/":
+                                display.setText(String.valueOf(leftOperand / rightOperand * 100));
+                                break;
                         }
-                        return;
+                        leftOperand = Double.parseDouble(display.getText());
+                        operation = null;
                     }
-                    leftOperand = Double.parseDouble(display.getText());
-                    operation = action;
-                    display.setText("0");
                 }
             }
         };
