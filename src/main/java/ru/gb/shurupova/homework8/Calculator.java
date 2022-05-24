@@ -1,0 +1,206 @@
+package ru.gb.shurupova.homework8;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Calculator extends JFrame {
+
+    private Double leftOperand;
+    private String operation = "";
+
+    public Calculator() {
+        setTitle("Calculator");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // завершает работу программы при закрытии формы
+        setBounds(300, 300, 400, 400);
+        setLayout(new BorderLayout()); // размещает элементы по краям
+
+// добавим дисплей (по умолчанию на дисплее ставим 0)
+        JLabel display = new JLabel("0");
+        display.setHorizontalAlignment(SwingConstants.RIGHT); // ориентируем написание цифра с права на лево
+        display.setFont(new Font("Arial", Font.PLAIN, 50)); // зададим шрифт
+        add(display, BorderLayout.NORTH); // добавляем дисплей на верх панели
+
+// экшен листинер для кнопок 0-9 и [.]
+        ActionListener numberListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource(); // чтобы отбражалась кнопка, которую нажали
+                String text = button.getText(); // в text будет лежать то, что написано на кнопке
+                String displayText = display.getText();
+
+                // если точка и дисплей уже сожержит точку, то выходим из метода
+                if (".".equals(text) && display.getText().contains(".")) {
+                    return;
+                }
+
+                // если ноль есть на дисплее и тект не равен точке, то на дисплее пусто
+                if ("0".equals(displayText) && !".".equals(text)) { // убрали лидирующий ноль и добавили что если первый раз нажать точку, то софрмируется 0,
+                    displayText = "";
+                }
+
+                displayText += text;
+                display.setText(displayText);
+            }
+        };
+
+// экшен листинер для кнопок "+-*/="
+        ActionListener buttonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton source = (JButton) e.getSource(); //передадим туда текст, который на этой кнопке
+                String action = source.getText(); // кнопка, кот. нажали или действие кот. надо сделать
+                Double rightOperand = Double.parseDouble(display.getText());
+                // метод parseDouble превращает строку в число, принимает на вход строку и превращает ее в число
+                // leftOperand - то значение, которое на дисплее
+                // rightOperand - то значение, которое было до того, как мы нажали операцию
+
+                if ("=".equals(action)) { // если action равен "="
+                    if (leftOperand != null) {
+                        switch (operation) {
+                            case "+":
+                                display.setText(String.valueOf(leftOperand + rightOperand));
+                                break;
+                            case "-":
+                                display.setText(String.valueOf(leftOperand - rightOperand));
+                                break;
+                            case "*":
+                                display.setText(String.valueOf(leftOperand * rightOperand));
+                                break;
+                            case "/":
+                                display.setText(String.valueOf(leftOperand / rightOperand));
+                                break;
+
+                        }
+                        // присовили leftOperand то что лежит на дисплее как число
+                        leftOperand = Double.parseDouble(display.getText());
+                        operation = null;
+                    }
+                    return;
+                }
+                // присовили leftOperand то что лежит на дисплее как число
+                leftOperand = Double.parseDouble(display.getText());
+                operation = action;
+                display.setText("0");
+            }
+        };
+
+// экшен листинер для +/-
+        ActionListener negativeButtonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                double negativeB = Double.parseDouble(display.getText());
+                negativeB = negativeB * (-1);
+                display.setText(negativeB + ""); // добавляя "" привожу Double к строке
+            }
+        };
+
+// экшен листинер для С
+        ActionListener deleteButtonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                display.setText("0");
+            }
+        };
+
+// экшен листинер для %
+        ActionListener percentButtonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // кноапка % имеет две операции:
+                // 1 - когда вводим число и нажимем % - оно умножается на 0,01 или делится на 100
+                // 2 - когда сначала вводится число, с ним выполняется операция и от второго считается %
+
+                if (operation.equals("")) { // если оператор равено "", то мы должны ввесьт данные на дисплей и разделить их на 100
+                    String number = display.getText(); // получаем из текста, записаного на дисплее, значение number
+                    double temp = Double.parseDouble(number) / 100; // заводим временную переменную temp
+                    number = temp + ""; // значение переменной number приводим к значению temp, чтобы привести все к стринг ставим ""
+                    display.setText(number); // выводим на дисплей значение переменной number
+                }
+
+                JButton source = (JButton) e.getSource();
+                String action = source.getText();
+                Double rightOperand = Double.parseDouble(display.getText());
+                if ("%".equals(action)) {
+                    if (leftOperand != null) {
+                        switch (operation) {
+                            case "+":
+                                display.setText(String.valueOf(leftOperand + leftOperand * rightOperand / 100));
+                                break;
+                            case "-":
+                                display.setText(String.valueOf(leftOperand - leftOperand * rightOperand / 100));
+                                break;
+                            case "*":
+                                display.setText(String.valueOf(leftOperand * rightOperand / 100));
+                                break;
+                            case "/":
+                                display.setText(String.valueOf(leftOperand / rightOperand * 100));
+                                break;
+                        }
+                        leftOperand = Double.parseDouble(display.getText());
+                        operation = null;
+                    }
+                }
+            }
+        };
+
+        JPanel numberPanel = new JPanel(); // несколько компоновщиков на одной панели
+        GridLayout numberLayout = new GridLayout(5, 4, 5, 5);
+        numberPanel.setLayout(numberLayout);
+
+        JButton percentButton = new JButton("%");
+        JButton bracketButton = new JButton("( )");
+        JButton deleteButton = new JButton("C");
+        numberPanel.add(percentButton);
+        percentButton.addActionListener(percentButtonListener);
+        numberPanel.add(bracketButton);
+        numberPanel.add(deleteButton);
+        deleteButton.addActionListener(deleteButtonListener);
+
+// добавляем кнопки на панель numberPanel
+        for (int i = 1; i < 10; i++) {
+            JButton button = new JButton(String.valueOf(i)); // переобразуем переменную int в String
+            button.addActionListener(numberListener); // добавили экшен листинер на кнопки в цикле
+            numberPanel.add(button);
+        }
+
+// добавим кнопки с точкой [.], со сменой знака [+/-] и ноль
+        JButton pointButton = new JButton(".");
+        pointButton.addActionListener(numberListener);
+
+        JButton nullButton = new JButton("0");
+        nullButton.addActionListener(numberListener);
+
+        JButton negativeButton = new JButton("+/-");
+        negativeButton.addActionListener(negativeButtonListener);
+
+
+// добавим новые кнопки на поле калькулятора
+        numberPanel.add(negativeButton);
+        numberPanel.add(nullButton);
+        numberPanel.add(pointButton);
+
+
+// создаем панель для кнопок сложения/вычитания/умножения
+        JPanel buttonPanel = new JPanel();
+        GridLayout buttonLayout = new GridLayout(5, 1, 5, 5);
+        buttonPanel.setLayout(buttonLayout);
+
+        for (char c : "/*-+=".toCharArray()) {
+            JButton button = new JButton(String.valueOf(c));
+            button.addActionListener(buttonListener);
+            buttonPanel.add(button);
+        }
+
+        add(numberPanel, BorderLayout.CENTER); // добавили панель в окно
+        add(buttonPanel, BorderLayout.EAST); // добавили панель с кнопками "C+-*/="
+
+        setVisible(true); // отображает окно после компеляции
+    }
+
+
+    public static void main(String[] args) {
+        new Calculator();
+    }
+}
